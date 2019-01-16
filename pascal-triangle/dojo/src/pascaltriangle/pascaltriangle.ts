@@ -1,11 +1,10 @@
 import { WidgetBase } from '@dojo/framework/widget-core/WidgetBase';
 import customElement from '@dojo/framework/widget-core/decorators/customElement';
 import { v } from '@dojo/framework/widget-core/d';
-import { ThemedMixin } from '@dojo/framework/widget-core/mixins/Themed';
 
 let _length = 100;
 
-function generateData(rows) {
+function generateData(rows: number) {
     const n = rows;
 
     const data = [];
@@ -30,9 +29,9 @@ function generateData(rows) {
     properties: [],
     events: []
 })
-export default class PascalTriangle extends ThemedMixin(WidgetBase) {
+export default class PascalTriangle extends WidgetBase {
     length = _length;
-    list: any = generateData(this.length);
+    list: number[][] = generateData(this.length);
 
     protected render() {
         return v('div', [
@@ -78,9 +77,11 @@ export default class PascalTriangle extends ThemedMixin(WidgetBase) {
         ]);
     }
 
-    handleLoad(e) {
-        console.log('handleLoad: ', e.target.getAttribute('data-value'));
-        this.length = parseInt(e.target.getAttribute('data-value'));
+    handleLoad(e: MouseEvent) {
+		const target = e.target as HTMLElement;
+        console.log('handleLoad: ', target.getAttribute('data-value'));
+        this.length = parseInt(target.getAttribute('data-value') as string);
         this.list = generateData(this.length);
+		this.invalidate();
     }
 }
